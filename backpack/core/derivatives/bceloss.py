@@ -3,15 +3,13 @@ from typing import List, Tuple
 
 from torch import Tensor, sigmoid
 from torch.distributions import Binomial
-
 from torch.nn import BCEWithLogitsLoss
 
 from backpack.core.derivatives.nll_base import NLLLossDerivatives
 
 
 class BCELossDerivatives(NLLLossDerivatives):
-    """Derivatives of the Binary Cross Entropy Loss.
-    """
+    """Derivatives of the Binary Cross Entropy Loss."""
 
     def __init__(self, use_autograd: bool = True):
         """Initialization for BCE loss derivative.
@@ -50,7 +48,15 @@ class BCELossDerivatives(NLLLossDerivatives):
         raise NotImplementedError
 
     def _verify_support(self, module: BCEWithLogitsLoss):
-        """Currently BCELoss only supports binary output tensors, 2D inputs, and default parameters."""
+        """Verification of module support for BCEWithLogitsLoss.
+
+        Currently BCELoss only supports binary output tensors, 2D inputs,
+        and default parameters.
+
+        Args:
+            module: (torch.nn.BCEWithLogitsLoss) module
+        """
+        """"""
         self._check_binary(module)
         self._check_is_default(module)
         self._check_input_dims(module)
@@ -58,7 +64,9 @@ class BCELossDerivatives(NLLLossDerivatives):
     def _check_binary(self, module: BCEWithLogitsLoss):
         """Raises exception if outputs are not binary."""
         if False in [x == 0 or x == 1 for x in module.input1]:
-            raise ValueError("Only 0 and 1 output values are currently supported for BCE loss.")
+            raise ValueError(
+                "Only 0 and 1 output values are currently supported for BCE loss."
+            )
 
     def _check_is_default(self, module: BCEWithLogitsLoss):
         """Raises exception if module parameters are not default."""
@@ -67,7 +75,9 @@ class BCELossDerivatives(NLLLossDerivatives):
         if module.reduction != "mean":
             raise ValueError("Only mean reduction is currently supported for BCE loss.")
         if module.pos_weight is not None:
-            raise ValueError("Only None pos_weight is currently supported for BCE loss.")
+            raise ValueError(
+                "Only None pos_weight is currently supported for BCE loss."
+            )
 
     def _check_input_dims(self, module: BCEWithLogitsLoss):
         """Raises an exception if the shapes of the input are not supported."""

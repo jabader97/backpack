@@ -8,7 +8,7 @@ import torch
 from torch import Tensor, long
 
 from backpack import extend
-from backpack.utils.module_classification import is_loss, is_mse, is_bce
+from backpack.utils.module_classification import is_bce, is_loss, is_mse
 from backpack.utils.subsampling import subsample
 
 

@@ -1,7 +1,7 @@
 """Contains util function for classification of modules."""
 from torch.fx import GraphModule
 from torch.nn import Module, Sequential
-from torch.nn.modules.loss import _Loss, BCEWithLogitsLoss
+from torch.nn.modules.loss import BCEWithLogitsLoss, _Loss
 
 from backpack.core.derivatives.mseloss import MSELoss
 from backpack.custom_module.branching import Parallel, _Branch

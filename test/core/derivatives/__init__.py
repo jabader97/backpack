@@ -13,6 +13,7 @@ from torch.nn import (
     BatchNorm1d,
     BatchNorm2d,
     BatchNorm3d,
+    BCEWithLogitsLoss,
     Conv1d,
     Conv2d,
     Conv3d,
@@ -34,7 +35,6 @@ from torch.nn import (
     Sigmoid,
     Tanh,
     ZeroPad2d,
-    BCEWithLogitsLoss,
 )
 
 from backpack.core.derivatives.adaptive_avg_pool_nd import (
@@ -46,6 +46,7 @@ from backpack.core.derivatives.avgpool1d import AvgPool1DDerivatives
 from backpack.core.derivatives.avgpool2d import AvgPool2DDerivatives
 from backpack.core.derivatives.avgpool3d import AvgPool3DDerivatives
 from backpack.core.derivatives.batchnorm_nd import BatchNormNdDerivatives
+from backpack.core.derivatives.bceloss import BCELossDerivatives
 from backpack.core.derivatives.conv1d import Conv1DDerivatives
 from backpack.core.derivatives.conv2d import Conv2DDerivatives
 from backpack.core.derivatives.conv3d import Conv3DDerivatives
@@ -80,7 +81,6 @@ from backpack.custom_module.pad import Pad
 from backpack.custom_module.permute import Permute
 from backpack.custom_module.scale_module import ScaleModule
 from backpack.custom_module.slicing import Slicing
-from backpack.core.derivatives.bceloss import BCELossDerivatives
 
 derivatives_for = {
     Linear: LinearDerivatives,

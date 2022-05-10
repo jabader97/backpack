@@ -40,7 +40,9 @@ IDS = [problem.make_id() for problem in PROBLEMS]
 NO_LOSS_PROBLEMS = [problem for problem in PROBLEMS if not problem.is_loss()]
 NO_LOSS_IDS = [problem.make_id() for problem in NO_LOSS_PROBLEMS]
 
-LOSS_PROBLEMS = [problem for problem in PROBLEMS if problem.is_loss() and not(problem.is_bce())]  # todo add bce back in once implemented
+LOSS_PROBLEMS = [
+    problem for problem in PROBLEMS if problem.is_loss() and not (problem.is_bce())
+]  # todo add bce back in once implemented
 LOSS_IDS = [problem.make_id() for problem in LOSS_PROBLEMS]
 
 # second-order does not make sense
