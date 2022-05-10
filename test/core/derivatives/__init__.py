@@ -34,6 +34,7 @@ from torch.nn import (
     Sigmoid,
     Tanh,
     ZeroPad2d,
+    BCEWithLogitsLoss,
 )
 
 from backpack.core.derivatives.adaptive_avg_pool_nd import (
@@ -79,6 +80,7 @@ from backpack.custom_module.pad import Pad
 from backpack.custom_module.permute import Permute
 from backpack.custom_module.scale_module import ScaleModule
 from backpack.custom_module.slicing import Slicing
+from backpack.core.derivatives.bceloss import BCELossDerivatives
 
 derivatives_for = {
     Linear: LinearDerivatives,
@@ -120,4 +122,5 @@ derivatives_for = {
     SumModule: SumModuleDerivatives,
     Pad: PadDerivatives,
     Slicing: SlicingDerivatives,
+    BCEWithLogitsLoss: BCELossDerivatives,
 }
