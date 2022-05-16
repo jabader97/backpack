@@ -246,7 +246,11 @@ class CrossEntropyLossDerivatives(NLLLossDerivatives):
         return input.numel() // input.shape[1]
 
     def _verify_support(self, module: CrossEntropyLoss):
-        """We only support default weight and ignore_index."""
+        """We only support default weight and ignore_index.
+
+        Args:
+            module: CrossEntropyLoss module
+        """
         self._check_2nd_order_parameters(module)
 
     def _make_distribution(self, subsampled_input: Tensor) -> OneHotCategorical:
