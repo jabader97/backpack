@@ -75,7 +75,7 @@ CUSTOM_SLICING_MODULE_IDS = [
     problem.make_id() for problem in CUSTOM_SLICING_MODULE_PROBLEMS
 ]
 
-NLL_PROBLEMS = [problem for problem in PROBLEMS if problem.is_mse() or problem.is_bce()]
+NLL_PROBLEMS = [problem for problem in PROBLEMS if problem.is_nll()]
 NLL_IDS = [problem.make_id() for problem in NLL_PROBLEMS]
 
 SUBSAMPLINGS = [None, [0, 0], [2, 0]]

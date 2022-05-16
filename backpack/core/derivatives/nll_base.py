@@ -2,8 +2,8 @@
 from math import sqrt
 from typing import List, Tuple
 
-from torch import Tensor, stack
-from torch.autograd import grad
+from torch import Tensor, stack, enable_grad
+from torch.autograd import grad, Variable
 from torch.distributions import Distribution
 from torch.nn import Module
 
@@ -43,6 +43,8 @@ class NLLLossDerivatives(BaseLossDerivatives):
         Otherwise, _compute_sampled_grads_manual must be implemented.
 
         In mean reduction mode, _get_mean_normalization must be implemented.
+
+        If use_autograd is True, _arrange and _rearrange may be implemented.
 
         Args:
             module: loss module.
@@ -104,6 +106,8 @@ class NLLLossDerivatives(BaseLossDerivatives):
 
         _make_distribution must be implemented for this function to work.
 
+        Optionally, _arrange and _rearrange may be specified as well.
+
         Args:
             subsampled_input: input after subsampling
             mc_samples: number of samples
@@ -111,6 +115,7 @@ class NLLLossDerivatives(BaseLossDerivatives):
         Returns:
             Sampled gradients of shape [mc_samples, *subsampled_input.shape]
         """
+        subsampled_input = self._arrange(subsampled_input.clone().detach())
         subsampled_input.requires_grad = True
         gradients = []
 
@@ -122,7 +127,7 @@ class NLLLossDerivatives(BaseLossDerivatives):
             loss_tilde = -dist.log_prob(y_tilde).sum()
             gradients.append(grad(loss_tilde, subsampled_input, retain_graph=True)[0])
 
-        return stack(gradients)
+        return self._rearrange(stack(gradients))
 
     def _compute_sampled_grads_manual(
         self, subsampled_input: Tensor, mc_samples: int
@@ -186,3 +191,33 @@ class NLLLossDerivatives(BaseLossDerivatives):
         """
         if dist.sample().shape != subsampled_input.shape:
             raise ValueError("Sample does not have same shape as subsampled_input.")
+
+    def _arrange(self, input: Tensor):
+        """Arrange subsampled input before samples are taken for autograd sample computation.
+
+        Subsampled_input may be arranged as desired before the autograd calculation of the
+        gradient. After arrangement, the tensor should be the correct shape to be passed
+        to _make_distribution. _rearrange should also be specified to return the final
+        gradient to the original shape. Default does no arranging.
+
+        Args:
+            input: subsampled input
+
+        Returns:
+            Subsampled input correctly arranged to be passed to _make_distribution
+        """
+        return input
+
+    def _rearrange(self, input: Tensor):
+        """Rearrange sampled gradient after autograd gradient calculation.
+
+        The opposite of _arrange, the gradient should be rearranged to match the
+        original shape of subsampled_input. Default does no rearranging.
+
+        Args:
+            input: autograd-sampled gradient with _arrange-specified formatting
+
+        Returns:
+            Sampled gradients of shape [mc_samples, *subsampled_input.shape]
+        """
+        return input

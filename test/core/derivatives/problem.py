@@ -8,7 +8,7 @@ import torch
 from torch import Tensor, long
 
 from backpack import extend
-from backpack.utils.module_classification import is_bce, is_loss, is_mse
+from backpack.utils.module_classification import is_bce, is_loss, is_mse, is_ce
 from backpack.utils.subsampling import subsample
 
 
@@ -146,6 +146,12 @@ class DerivativesTestProblem:
 
     def is_bce(self):
         return is_bce(self.make_module())
+
+    def is_ce(self):
+        return is_ce(self.make_module())
+
+    def is_nll(self):
+        return self.is_ce() or self.is_mse() or self.is_bce()
 
     def forward_pass(
         self, input_requires_grad: bool = False, subsampling: List[int] = None
