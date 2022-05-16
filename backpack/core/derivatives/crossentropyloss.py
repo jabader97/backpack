@@ -3,9 +3,9 @@ from math import sqrt
 from typing import Callable, Dict, List, Tuple
 
 from einops import rearrange
-from torch import Tensor, diag, diag_embed, einsum, eye, ones_like, Size, softmax
-from torch.nn import CrossEntropyLoss
+from torch import Size, Tensor, diag, diag_embed, einsum, eye, ones_like, softmax
 from torch.distributions import OneHotCategorical
+from torch.nn import CrossEntropyLoss
 
 from backpack.core.derivatives.nll_base import NLLLossDerivatives
 from backpack.utils.subsampling import subsample
@@ -279,9 +279,13 @@ class CrossEntropyLossDerivatives(NLLLossDerivatives):
         Returns:
             Gradient samples
         """
-        subsampled_input, *self.rearrange_info = self._merge_batch_and_additional(subsampled_input)
+        subsampled_input, *self.rearrange_info = self._merge_batch_and_additional(
+            subsampled_input
+        )
         probs = softmax(subsampled_input, dim=1)
-        samples = self._make_distribution(subsampled_input).sample(sample_shape=Size([mc_samples]))
+        samples = self._make_distribution(subsampled_input).sample(
+            sample_shape=Size([mc_samples])
+        )
         sqrt_mc_h = probs - samples
         return self._ungroup_batch_and_additional(sqrt_mc_h, *self.rearrange_info)
 

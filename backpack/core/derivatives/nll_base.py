@@ -2,8 +2,8 @@
 from math import sqrt
 from typing import List, Tuple
 
-from torch import Tensor, stack, enable_grad
-from torch.autograd import grad, Variable
+from torch import Tensor, enable_grad, stack
+from torch.autograd import Variable, grad
 from torch.distributions import Distribution
 from torch.nn import Module
 
